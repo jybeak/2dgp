@@ -9,15 +9,20 @@ image = None
 
 def enter():
     global image
+    open_canvas()
     image = load_image('title.png')
-    pass
 
 
 def exit():
     global image
-    del (image)
+    del(image)
+    close_canvas()
 
-    pass
+def draw():
+    clear_canvas()
+    image.draw(400, 300)
+    update_canvas()
+
 
 
 def handle_events():
@@ -28,32 +33,11 @@ def handle_events():
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
-            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
+            elif (event.type, event.key)==(SDL_KEYDOWN, SDLK_SPACE):
                 game_framework.change_state(main_state)
 
-    pass
+
+def pause(): pass
 
 
-def draw():
-    clear_canvas()
-    image.draw(400, 300)
-    update_canvas()
-
-    pass
-
-
-
-
-
-
-
-def update():
-    pass
-
-
-def pause():
-    pass
-
-
-def resume():
-    pass
+def resume(): pass
