@@ -11,7 +11,7 @@ count =0
 
 def enter():
     global image
-    image = load_image('char.png')
+    image = load_image('chicken.png')
 
 
 def exit():

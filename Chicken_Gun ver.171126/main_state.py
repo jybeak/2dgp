@@ -4,31 +4,38 @@ import game_framework
 import pause_state
 import title_state
 import end_state
-import math
+
 
 from chicken import Chicken     # import Chicken class from chicken.py
 from bullet import Bullet
+from monster import *
+
 
 name = "MainState"
 
+
+score = 0
+current_time = get_time()
+
 chicken = None
 bullet = None
+blue_hat_monsters = None
 fire_on = False
 
-
-
 def create_world():
-    global chicken, bullet
+    global chicken, bullet, blue_hat_monsters
     chicken = Chicken()
     bullet = Bullet()
+    blue_hat_monsters = []
     pass
 
 
 def destroy_world():
-    global chicken, bullet
+    global chicken, bullet, blue_hat_monsters
 
     del(chicken)
     del(bullet)
+    del(blue_hat_monsters)
 
 
 
@@ -86,9 +93,11 @@ def collide(a, b):
     return True
 
 def draw_main_scene():
-    global fire_on
+    global fire_on, blue_hat_monsters
     chicken.draw()
     chicken.draw_bb()
+    for monster in blue_hat_monsters:
+        monster.draw()
     if fire_on == True:
         bullet.draw()
         bullet.draw_bb()
@@ -97,37 +106,30 @@ def draw_main_scene():
 
 
 def update(frame_time):
-    global fire_on, bullet
+    global fire_on, bullet, blue_hat_monsters, blue_hat_monster_time
     chicken.update(frame_time)
-    print(fire_on)
+    blue_hat_monster_time += frame_time
+    if blue_hat_monster_time > 0.7:
+        new_blue_hat_monster = Blue_hat_monster()
+        blue_hat_monsters.append(new_blue_hat_monster)
+        blue_hat_monster_time = 0
+    for monster in blue_hat_monsters:
+        monster.update(frame_time)
     if fire_on == True:
         bullet.update(frame_time)
-    #for ball in balls:
-    #    ball.update(frame_time)
-
-    if chicken.y < 100 :
-        game_framework.push_state(end_state)
 
 
 
-    #for ball in balls:
-    #    if collide(brick, ball) :
-    #        if brick.state == brick.RIGHT_MOVE:
-    #            ball.x += frame_time * brick.speed
-    #        elif brick.state == brick.LEFT_MOVE:
-    #            ball.x -= frame_time * brick.speed
-    #       if brick.x > 800:
-    #           ball.x = 800
-    #           brick.state = brick.LEFT_MOVE
-    #     elif brick.x < 0:
-    #        ball.x = 0
-    #         brick.state = brick.RIGHT_MOVE
+
+
 
 
 
 
 def draw(frame_time):
     clear_canvas()
+    for monster in blue_hat_monsters:
+        monster.draw()
     chicken.draw()
     #brick.draw()\
     chicken.draw_bb()
@@ -138,9 +140,6 @@ def draw(frame_time):
     pass
 
     update_canvas()
-
-
-
 
 
 

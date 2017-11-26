@@ -6,8 +6,8 @@ class Bullet:
 
     image = None
     def __init__(self):
-        self.speed = 1500
-        self.x, self.y = 0 ,300
+        self.speed = 2000
+        self.x, self.y = main_state.chicken.x+40 ,main_state.chicken.y-30
         if Bullet.image == None:
              Bullet.image = load_image('bullet.png')
 
@@ -16,7 +16,7 @@ class Bullet:
         self.x += distance
 
         if self.x > 800:
-            self.x = main_state.chicken.x+30
+            self.x = main_state.chicken.x+40
             self.y = main_state.chicken.y
         pass
 
