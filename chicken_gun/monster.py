@@ -12,7 +12,7 @@ class Blue_hat_monster:
         self.x, self.y = 800, random.randint(0, 600)
         self.speed = +500
         if Blue_hat_monster.image is None:
-            Blue_hat_monster.image = load_image('blue_hat_monster.png')
+            Blue_hat_monster.image = load_image('resouce/blue_hat_monster.png')
 
     def update(self, frame_time):
         distance = self.speed * frame_time

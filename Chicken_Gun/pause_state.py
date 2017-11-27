@@ -11,7 +11,7 @@ count =0
 
 def enter():
     global image
-    image = load_image('char.png')
+    image = load_image('resouce/chicken.png')
 
 
 def exit():
@@ -26,7 +26,7 @@ def update(frame_time):
 
 
 def draw(frame_time):
-    global  image
+    global image
     clear_canvas()
     main_state.draw_main_scene()
     if count <50:

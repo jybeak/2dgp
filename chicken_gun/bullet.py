@@ -9,7 +9,7 @@ class Bullet:
         self.speed = 2000
         self.x, self.y = main_state.chicken.x+40 ,main_state.chicken.y-30
         if Bullet.image == None:
-             Bullet.image = load_image('bullet.png')
+             Bullet.image = load_image('resouce/bullet.png')
 
     def update(self, frame_time):
         distance = self.speed * frame_time

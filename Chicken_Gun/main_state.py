@@ -3,39 +3,40 @@ import os
 import game_framework
 import pause_state
 import title_state
+import end_state
 
-from boy import Boy # import Boy class from boy.py
-from ball import Ball, BigBall
-from grass import Grass
-from brick import Brick
+
+from chicken import Chicken     # import Chicken class from chicken.py
+from bullet import Bullet
+from monster import *
+
+
 
 name = "MainState"
 
-boy = None
-balls = None
-big_balls = None
-grass = None
-brick = None
+
+score = 0
+current_time = get_time()
+
+chicken = None
+bullet = None
+blue_hat_monsters = None
+fire_mode_on = False
 
 def create_world():
-    global boy, grass, balls, big_balls, brick
-    boy = Boy()
-    big_balls = [BigBall() for i in range(20)]
-    balls = [Ball() for i in range(10)]
-    balls = big_balls + balls
-    grass = Grass()
-    brick = Brick()
+    global chicken, bullet, blue_hat_monsters
+    chicken = Chicken()
+    bullet = Bullet()
+    blue_hat_monsters = []
     pass
 
 
 def destroy_world():
-    global boy, grass, balls, big_balls, brick
+    global chicken, bullet, blue_hat_monsters
 
-    del(boy)
-    del(balls)
-    del(grass)
-    del(big_balls)
-    del(brick)
+    del(chicken)
+    del(bullet)
+    del(blue_hat_monsters)
 
 
 
@@ -59,17 +60,24 @@ def resume():
 
 def handle_events(frame_time):
     events = get_events()
+    global fire_mode_on
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
-            # p를 누르면 pause_state로 간다.
             elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
                 game_framework.push_state(pause_state)
+            elif event.type == SDL_MOUSEBUTTONDOWN:
+                if fire_mode_on == False:
+                    fire_mode_on = True
+                elif fire_mode_on == True:
+                    fire_mode_on = False
             else:
-                boy.handle_event(event)
+                chicken.handle_event(event)
+
+
 
 
 
@@ -84,56 +92,62 @@ def collide(a, b):
 
     return True
 
+
+
 def draw_main_scene():
-    grass.draw()
-    boy.draw()
-    brick.draw()
-    for ball in balls:
-        ball.draw()
+    global fire_mode_on, blue_hat_monsters
+    chicken.draw()
+    chicken.draw_bb()
+    for monster in blue_hat_monsters:
+        monster.draw()
+    if fire_mode_on == True:
+        bullet.draw()
+        bullet.draw_bb()
+
+
 
 
 def update(frame_time):
-    boy.update(frame_time)
-    brick.update(frame_time)
-    for ball in balls:
-        ball.update(frame_time)
+    global fire_mode_on, bullet, blue_hat_monsters, blue_hat_monster_time
 
-    for ball in balls:
-        if collide(brick, ball) :
-            if brick.state == brick.RIGHT_MOVE:
-                ball.x += frame_time * brick.speed
-            elif brick.state == brick.LEFT_MOVE:
-                ball.x -= frame_time * brick.speed
-            if brick.x > 800:
-                ball.x = 800
-                brick.state = brick.LEFT_MOVE
-            elif brick.x < 0:
-                ball.x = 0
-                brick.state = brick.RIGHT_MOVE
-            ball.y = brick.y + 40
+    chicken.update(frame_time)
+    blue_hat_monster_time += frame_time
+
+    if blue_hat_monster_time > 0.7:
+        new_blue_hat_monster = Blue_hat_monster()
+        blue_hat_monsters.append(new_blue_hat_monster)
+        blue_hat_monster_time = 0
+
+    for monster in blue_hat_monsters:
+        monster.update(frame_time)
+
+    if fire_mode_on == True:
+        bullet.update(frame_time)
+
+    if chicken.life == 0:
+        chicken.life =3
+        game_framework.push_state(end_state)
+
+
+
 
 
 
 
 def draw(frame_time):
     clear_canvas()
-    grass.draw()
-    boy.draw()
-    brick.draw()
-    for ball in balls:
-        ball.draw()
+    for monster in blue_hat_monsters:
+        monster.draw()
+    chicken.draw()
+    #brick.draw()\
+    chicken.draw_bb()
 
-    grass.draw_bb()
-    boy.draw_bb()
-    brick.draw_bb()
-    for ball in balls:
-        ball.draw_bb()
+    if fire_mode_on == True:
+        bullet.draw()
+        bullet.draw_bb()
     pass
 
     update_canvas()
-
-
-
 
 
 

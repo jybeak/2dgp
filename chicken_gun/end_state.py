@@ -1,26 +1,23 @@
 from pico2d import *
 import main_state
+import title_state
 import game_framework
 
-name = "TitleState"
+name = "EndState"
 
-BackGround_Image = None
-Push_Spacebar_image = None
+gameover_image = None
 
 
 def enter():
-    global BackGround_Image, Push_Spacebar_image
-    open_canvas()
-    BackGround_Image = load_image('title.png')
-    Push_Spacebar_image = load_image('space.png')
+    global gameover_image
+    gameover_image = load_image('resouce/gameover.png')
     game_framework.reset_time()
 
 
 def exit():
-    global BackGround_Image, Push_Spacebar_image
+    global gameover_image
 
-    del (BackGround_Image, Push_Spacebar_image)
-    close_canvas()
+    del (gameover_image)
 
 
 def pause():
@@ -40,7 +37,7 @@ def handle_events(frame_time):
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
             elif (event.type, event.key)==(SDL_KEYDOWN, SDLK_SPACE):
-                game_framework.push_state(main_state)
+                game_framework.pop_state()
 
 
 
@@ -52,10 +49,9 @@ def update(frame_time):
 
 
 def draw(frame_time):
-    global BackGround_Image, Push_Spacebar_image
+    global gameover_image
     clear_canvas()
-    BackGround_Image.draw(400, 300)
-    Push_Spacebar_image.draw (400, 100)
+    gameover_image.draw(400, 300)
     update_canvas()
 
 

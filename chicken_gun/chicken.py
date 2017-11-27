@@ -31,7 +31,7 @@ class Chicken:
         self.life = 3
         self.state = self.STAND
         if Chicken.image == None:
-            Chicken.image = load_image('chicken.png')
+            Chicken.image = load_image('resouce/chicken.png')
         if Chicken.font == None:
             Chicken.font = load_font('ENCR10B.TTF', 20)
 
@@ -57,8 +57,7 @@ class Chicken:
             self.life-=1
             self.y = 500
 
-        if self.life == 0:
-            game_framework.push_state(end_state)
+
 
 
 
