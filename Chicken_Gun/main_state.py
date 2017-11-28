@@ -14,7 +14,6 @@ from monster import *
 
 name = "MainState"
 
-
 score = 0
 current_time = get_time()
 
@@ -76,6 +75,7 @@ def handle_events(frame_time):
                     fire_mode_on = False
             else:
                 chicken.handle_event(event)
+                bullet.handle_event(event)
 
 
 

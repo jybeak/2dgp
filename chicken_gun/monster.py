@@ -10,7 +10,7 @@ class Blue_hat_monster:
 
     def __init__(self):
         self.x, self.y = 800, random.randint(0, 600)
-        self.speed = +500
+        self.speed = 500
         if Blue_hat_monster.image is None:
             Blue_hat_monster.image = load_image('resouce/blue_hat_monster.png')
 
