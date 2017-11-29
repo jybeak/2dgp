@@ -5,10 +5,14 @@ from pico2d import *
 
 
 class Bullet:
+    PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+    RUN_SPEED_KMPH = 200.0  # Km / Hour
+    RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+    RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+    RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
     image = None
     def __init__(self):
-        self.speed = 2000
         self.mouse_pos_x = 0
         self.mouse_pos_y = 0
         self.x, self.y = main_state.chicken.x+40 ,main_state.chicken.y-10
@@ -24,8 +28,8 @@ class Bullet:
 
         cos_theta = distance_between_mousecursor_chicken_x / distance_between_mousecursor_chicken
         sin_theta = distance_between_mousecursor_chicken_y / distance_between_mousecursor_chicken
-        self.x += (cos_theta * self.speed * frame_time)
-        self.y += (sin_theta * self.speed * frame_time)
+        self.x += (cos_theta * Bullet.RUN_SPEED_PPS * frame_time)
+        self.y += (sin_theta * Bullet.RUN_SPEED_PPS * frame_time)
 
         print(self.mouse_pos_x ,self.mouse_pos_y )
 
