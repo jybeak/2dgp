@@ -20,22 +20,25 @@ current_time = get_time()
 chicken = None
 bullet = None
 blue_hat_monsters = None
+red_plant_monsters = None
 fire_mode_on = False
 
 def create_world():
-    global chicken, bullet, blue_hat_monsters
+    global chicken, bullet, blue_hat_monsters, red_plant_monsters
     chicken = Chicken()
     bullet = Bullet()
     blue_hat_monsters = []
+    red_plant_monsters = []
     pass
 
 
 def destroy_world():
-    global chicken, bullet, blue_hat_monsters
+    global chicken, bullet, blue_hat_monsters, red_plant_monsters
 
     del(chicken)
     del(bullet)
     del(blue_hat_monsters)
+    del(red_plant_monsters)
 
 
 
@@ -92,14 +95,43 @@ def collide(a, b):
 
     return True
 
+def check_collision_chicken_monters():
+    global chicken, bullet, blue_hat_monsters, red_plant_monsters
 
+    for monster in blue_hat_monsters:
+        if collide(chicken, monster):
+            blue_hat_monsters.remove(monster)
+            chicken.life-=1
+
+    for monster in red_plant_monsters:
+        if collide(chicken, monster):
+            red_plant_monsters.remove(monster)
+            chicken.life-=1
+
+def check_collision_bullet_monters():
+    global chicken, bullet, blue_hat_monsters, red_plant_monsters
+
+    for monster in blue_hat_monsters:
+        if collide(bullet, monster):
+            bullet.x, bullet.y = chicken.x + 40, chicken.y
+            blue_hat_monsters.remove(monster)
+
+    for monster in red_plant_monsters:
+        if collide(bullet, monster):
+            bullet.x, bullet.y = chicken.x+40, chicken.y
 
 def draw_main_scene():
-    global fire_mode_on, blue_hat_monsters
+    global fire_mode_on, blue_hat_monsters, red_plant_monsters
     chicken.draw()
     chicken.draw_bb()
     for monster in blue_hat_monsters:
         monster.draw()
+        monster.draw_bb()
+
+    for monster in red_plant_monsters:
+        monster.draw()
+        monster.draw_bb()
+
     if fire_mode_on == True:
         bullet.draw()
         bullet.draw_bb()
@@ -108,17 +140,28 @@ def draw_main_scene():
 
 
 def update(frame_time):
-    global fire_mode_on, bullet, blue_hat_monsters, blue_hat_monster_time
+    global fire_mode_on, bullet, blue_hat_monsters, blue_hat_monster_time, red_plant_monsters ,red_plant_monster_time
 
     chicken.update(frame_time)
+    check_collision_chicken_monters()
+    check_collision_bullet_monters()
     blue_hat_monster_time += frame_time
+    red_plant_monster_time += frame_time
 
     if blue_hat_monster_time > 0.7:
         new_blue_hat_monster = Blue_hat_monster()
         blue_hat_monsters.append(new_blue_hat_monster)
         blue_hat_monster_time = 0
 
+    if red_plant_monster_time > 1.2:
+        new_red_plant_monster = Red_plant_monster()
+        red_plant_monsters.append(new_red_plant_monster)
+        red_plant_monster_time = 0
+
     for monster in blue_hat_monsters:
+        monster.update(frame_time)
+
+    for monster in red_plant_monsters:
         monster.update(frame_time)
 
     if fire_mode_on == True:
@@ -126,6 +169,8 @@ def update(frame_time):
 
     if chicken.life == 0:
         chicken.life =3
+        blue_hat_monsters = []
+        red_plant_monsters = []
         game_framework.push_state(end_state)
 
 
@@ -135,11 +180,17 @@ def update(frame_time):
 
 
 def draw(frame_time):
+    global chicken, bullet, blue_hat_monsters, red_plant_monsters
     clear_canvas()
     for monster in blue_hat_monsters:
         monster.draw()
+        monster.draw_bb()
+
+    for monster in red_plant_monsters:
+        monster.draw()
+        monster.draw_bb()
+
     chicken.draw()
-    #brick.draw()\
     chicken.draw_bb()
 
     if fire_mode_on == True:
