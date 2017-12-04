@@ -13,11 +13,9 @@ class Chicken:
 
 
     image = None
-    font = None
     LEFT_FLYING, RIGHT_FLYING, STAND = 0, 1, 2
 
     def __init__(self):
-        self.score = 0
         self.x, self.y = 0, 350
         self.life_time = 0.0
         self.flying_dir = 0
@@ -28,8 +26,6 @@ class Chicken:
         self.state = self.STAND
         if Chicken.image == None:
             Chicken.image = load_image('resouce/chicken.png')
-        if Chicken.font == None:
-            Chicken.font = load_font('ENCR10B.TTF', 20)
 
 
     def update(self, frame_time):

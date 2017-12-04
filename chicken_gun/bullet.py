@@ -5,6 +5,9 @@ from pico2d import *
 
 
 class Bullet:
+
+    BULLET_LEVEL01, BULLET_LEVEL02 = 0, 1
+
     PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
     RUN_SPEED_KMPH = 200.0  # Km / Hour
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
@@ -13,6 +16,7 @@ class Bullet:
 
     image = None
     def __init__(self):
+        self.state = self.BULLET_LEVEL01
         self.mouse_pos_x = 0
         self.mouse_pos_y = 0
         self.x, self.y = main_state.chicken.x+40 ,main_state.chicken.y-10
@@ -28,15 +32,14 @@ class Bullet:
 
         cos_theta = distance_between_mousecursor_chicken_x / distance_between_mousecursor_chicken
         sin_theta = distance_between_mousecursor_chicken_y / distance_between_mousecursor_chicken
-        self.x += (cos_theta * Bullet.RUN_SPEED_PPS * frame_time)
-        self.y += (sin_theta * Bullet.RUN_SPEED_PPS * frame_time)
 
-        print(self.mouse_pos_x ,self.mouse_pos_y )
+        if self.state == self.BULLET_LEVEL01 :
+            self.x += (Bullet.RUN_SPEED_PPS * frame_time)
+        elif self.state == self.BULLET_LEVEL02:
+            self.x += (cos_theta * Bullet.RUN_SPEED_PPS * frame_time)
+            self.y += (sin_theta * Bullet.RUN_SPEED_PPS * frame_time)
 
 
-        if self.x > 800 or self.x < 0 or self.y > 600 or self.y < 0:
-            self.x, self.y = main_state.chicken.x + 40, main_state.chicken.y
-        pass
 
     def draw(self):
         self.image.draw(self.x, self.y)

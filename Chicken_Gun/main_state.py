@@ -18,25 +18,24 @@ score = 0
 current_time = get_time()
 
 chicken = None
-bullet = None
+bullets = None
 blue_hat_monsters = None
 red_plant_monsters = None
-fire_mode_on = False
 
 def create_world():
-    global chicken, bullet, blue_hat_monsters, red_plant_monsters
+    global chicken, bullets, blue_hat_monsters, red_plant_monsters
     chicken = Chicken()
-    bullet = Bullet()
+    bullets = []
     blue_hat_monsters = []
     red_plant_monsters = []
     pass
 
 
 def destroy_world():
-    global chicken, bullet, blue_hat_monsters, red_plant_monsters
+    global chicken, bullets, blue_hat_monsters, red_plant_monsters
 
     del(chicken)
-    del(bullet)
+    del(bullets)
     del(blue_hat_monsters)
     del(red_plant_monsters)
 
@@ -62,7 +61,7 @@ def resume():
 
 def handle_events(frame_time):
     events = get_events()
-    global fire_mode_on
+    global bullets
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
@@ -72,13 +71,13 @@ def handle_events(frame_time):
             elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
                 game_framework.push_state(pause_state)
             elif event.type == SDL_MOUSEBUTTONDOWN:
-                if fire_mode_on == False:
-                    fire_mode_on = True
-                elif fire_mode_on == True:
-                    fire_mode_on = False
+                new_bullet = Bullet()
+                bullets.append(new_bullet)
+                print(bullets)
             else:
                 chicken.handle_event(event)
-                bullet.handle_event(event)
+                for bullet in bullets:
+                    bullet.handle_event(event)
 
 
 
@@ -109,19 +108,23 @@ def check_collision_chicken_monters():
             chicken.life-=1
 
 def check_collision_bullet_monters():
-    global chicken, bullet, blue_hat_monsters, red_plant_monsters
-
+    global chicken, bullets, blue_hat_monsters, red_plant_monsters
     for monster in blue_hat_monsters:
-        if collide(bullet, monster):
-            bullet.x, bullet.y = chicken.x + 40, chicken.y
-            blue_hat_monsters.remove(monster)
+        for bullet in bullets:
+            if collide(bullet, monster):
+                bullets.remove(bullet)
+                blue_hat_monsters.remove(monster)
 
     for monster in red_plant_monsters:
-        if collide(bullet, monster):
-            bullet.x, bullet.y = chicken.x+40, chicken.y
+        for bullet in bullets:
+            if collide(bullet, monster):
+                bullets.remove(bullet)
+                monster.life -=1
+                if monster.life == 0:
+                    red_plant_monsters.remove(monster)
 
 def draw_main_scene():
-    global fire_mode_on, blue_hat_monsters, red_plant_monsters
+    global blue_hat_monsters, red_plant_monsters, bullets
     chicken.draw()
     chicken.draw_bb()
     for monster in blue_hat_monsters:
@@ -132,7 +135,7 @@ def draw_main_scene():
         monster.draw()
         monster.draw_bb()
 
-    if fire_mode_on == True:
+    for bullet in bullets:
         bullet.draw()
         bullet.draw_bb()
 
@@ -140,7 +143,7 @@ def draw_main_scene():
 
 
 def update(frame_time):
-    global fire_mode_on, bullet, blue_hat_monsters, blue_hat_monster_time, red_plant_monsters ,red_plant_monster_time
+    global bullets, blue_hat_monsters, blue_hat_monster_time, red_plant_monsters ,red_plant_monster_time
 
     chicken.update(frame_time)
     check_collision_chicken_monters()
@@ -164,13 +167,16 @@ def update(frame_time):
     for monster in red_plant_monsters:
         monster.update(frame_time)
 
-    if fire_mode_on == True:
+    for bullet in bullets:
         bullet.update(frame_time)
+        if bullet.x > 800 or bullet.x < 0 or bullet.y > 600 or bullet.y < 0:
+            bullets.remove(bullet)
 
     if chicken.life == 0:
         chicken.life =3
         blue_hat_monsters = []
         red_plant_monsters = []
+        bullets= []
         game_framework.push_state(end_state)
 
 
@@ -180,7 +186,7 @@ def update(frame_time):
 
 
 def draw(frame_time):
-    global chicken, bullet, blue_hat_monsters, red_plant_monsters
+    global chicken, bullets, blue_hat_monsters, red_plant_monsters
     clear_canvas()
     for monster in blue_hat_monsters:
         monster.draw()
@@ -193,7 +199,7 @@ def draw(frame_time):
     chicken.draw()
     chicken.draw_bb()
 
-    if fire_mode_on == True:
+    for bullet in bullets:
         bullet.draw()
         bullet.draw_bb()
     pass

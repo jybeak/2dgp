@@ -45,6 +45,7 @@ class Red_plant_monster:
 
     def __init__(self):
         self.x, self.y = 800, random.randint(0, 600)
+        self.life =3
         if Red_plant_monster.image is None:
             Red_plant_monster.image = load_image('resouce/red_plant_monster.png')
 
