@@ -21,7 +21,7 @@ class Bullet:
         self.state = self.BULLET_LEVEL01
         self.mouse_pos_x = 0
         self.mouse_pos_y = 0
-        self.x, self.y = main_state.chicken.x+40 ,main_state.chicken.y-10
+        self.x, self.y = main_state.chicken.x+40 ,main_state.chicken.y
         if Bullet.image == None:
              Bullet.image = load_image('resouce/bullet.png')
 

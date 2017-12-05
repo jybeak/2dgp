@@ -1,6 +1,5 @@
 import random
 import end_state
-import game_framework
 from pico2d import *
 
 class Chicken:

@@ -6,9 +6,10 @@ import title_state
 import end_state
 
 
-from chicken import Chicken     # import Chicken class from chicken.py
-from bullet import Bullet
+from chicken import *     # import Chicken class from chicken.py
+from bullet import *
 from monster import *
+from ui import *
 
 
 
@@ -21,23 +22,26 @@ chicken = None
 bullets = None
 blue_hat_monsters = None
 red_plant_monsters = None
-
+ui = None
 def create_world():
-    global chicken, bullets, blue_hat_monsters, red_plant_monsters
+    global chicken, ui, bullets, blue_hat_monsters, red_plant_monsters
     chicken = Chicken()
+    ui = Ui()
     bullets = []
     blue_hat_monsters = []
     red_plant_monsters = []
+
     pass
 
 
 def destroy_world():
-    global chicken, bullets, blue_hat_monsters, red_plant_monsters
+    global chicken, ui,bullets, blue_hat_monsters, red_plant_monsters
 
     del(chicken)
     del(bullets)
     del(blue_hat_monsters)
     del(red_plant_monsters)
+    del(ui)
 
 
 
@@ -73,7 +77,6 @@ def handle_events(frame_time):
             elif event.type == SDL_MOUSEBUTTONDOWN:
                 new_bullet = Bullet()
                 bullets.append(new_bullet)
-                print(bullets)
             else:
                 chicken.handle_event(event)
                 for bullet in bullets:
@@ -108,12 +111,13 @@ def check_collision_chicken_monters():
             chicken.life-=1
 
 def check_collision_bullet_monters():
-    global chicken, bullets, blue_hat_monsters, red_plant_monsters
+    global chicken, bullets, blue_hat_monsters, red_plant_monsters, ui
     for monster in blue_hat_monsters:
         for bullet in bullets:
             if collide(bullet, monster):
                 bullets.remove(bullet)
                 blue_hat_monsters.remove(monster)
+                ui.score += 10
 
     for monster in red_plant_monsters:
         for bullet in bullets:
@@ -122,22 +126,20 @@ def check_collision_bullet_monters():
                 monster.life -=1
                 if monster.life == 0:
                     red_plant_monsters.remove(monster)
+                    ui.score += 20
 
 def draw_main_scene():
     global blue_hat_monsters, red_plant_monsters, bullets
     chicken.draw()
-    chicken.draw_bb()
     for monster in blue_hat_monsters:
         monster.draw()
-        monster.draw_bb()
 
     for monster in red_plant_monsters:
         monster.draw()
-        monster.draw_bb()
 
     for bullet in bullets:
         bullet.draw()
-        bullet.draw_bb()
+    ui.draw()
 
 
 
@@ -186,22 +188,19 @@ def update(frame_time):
 
 
 def draw(frame_time):
-    global chicken, bullets, blue_hat_monsters, red_plant_monsters
+    global chicken, ui,bullets, blue_hat_monsters, red_plant_monsters
     clear_canvas()
     for monster in blue_hat_monsters:
         monster.draw()
-        monster.draw_bb()
 
     for monster in red_plant_monsters:
         monster.draw()
-        monster.draw_bb()
 
     chicken.draw()
-    chicken.draw_bb()
 
     for bullet in bullets:
         bullet.draw()
-        bullet.draw_bb()
+    ui.draw()
     pass
 
     update_canvas()

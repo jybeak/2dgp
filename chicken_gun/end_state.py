@@ -2,7 +2,7 @@ from pico2d import *
 import main_state
 import title_state
 import game_framework
-
+from ui import *
 name = "EndState"
 
 gameover_image = None
@@ -37,6 +37,7 @@ def handle_events(frame_time):
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
             elif (event.type, event.key)==(SDL_KEYDOWN, SDLK_SPACE):
+                main_state.ui.score = 0
                 game_framework.pop_state()
 
 
@@ -52,6 +53,7 @@ def draw(frame_time):
     global gameover_image
     clear_canvas()
     gameover_image.draw(400, 300)
+    main_state.ui.font_score.draw(320, 200, 'Score:%d' % main_state.ui.score, (255, 255, 255))
     update_canvas()
 
 
