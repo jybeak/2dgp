@@ -3,6 +3,8 @@ import math
 import main_state
 from pico2d import *
 
+bullet_between_bullet_time = 0
+
 
 class Bullet:
 
