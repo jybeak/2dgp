@@ -6,7 +6,6 @@ class Ui:
     font_score = None
     font_life = None
 
-
     def __init__(self):
         self.score = 0
         if Ui.image_life == None:
@@ -15,8 +14,6 @@ class Ui:
             Ui.font_score = load_font('resouce/ENCR10B.TTF', 25)
         if Ui.font_life == None:
             Ui.font_life = load_font('resouce/ENCR10B.TTF', 25)
-
-
 
     def draw(self):
         self.font_score.draw(40, 570, 'Score:%d' % self.score, (0, 0, 0))

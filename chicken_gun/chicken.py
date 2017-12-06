@@ -13,7 +13,7 @@ class Chicken:
 
     image = None
     LEFT_FLYING, RIGHT_FLYING, STAND = 0, 1, 2
-
+    BULLET_LEVEL01, BULLET_LEVEL02 = 0, 1
     def __init__(self):
         self.x, self.y = 0, 350
         self.life_time = 0.0
@@ -23,6 +23,7 @@ class Chicken:
         self.fall_speed = -200
         self.life = 3
         self.state = self.STAND
+        self.bullet_state = self.BULLET_LEVEL01
         if Chicken.image == None:
             Chicken.image = load_image('resouce/chicken.png')
 

@@ -4,6 +4,7 @@ import game_framework
 import pause_state
 import title_state
 import end_state
+import random
 
 
 from chicken import *     # import Chicken class from chicken.py
@@ -20,13 +21,17 @@ current_time = get_time()
 
 chicken = None
 bullets = None
+bullet_level_up = None
 blue_hat_monsters = None
 red_plant_monsters = None
 ui = None
+
+
 def create_world():
-    global chicken, ui, bullets, blue_hat_monsters, red_plant_monsters
+    global chicken, ui, bullets, blue_hat_monsters, red_plant_monsters, bullet_level_up
     chicken = Chicken()
     ui = Ui()
+    bullet_level_up = Bullet_level_up()
     bullets = []
     blue_hat_monsters = []
     red_plant_monsters = []
@@ -35,10 +40,11 @@ def create_world():
 
 
 def destroy_world():
-    global chicken, ui,bullets, blue_hat_monsters, red_plant_monsters
+    global chicken, ui,bullets, blue_hat_monsters, red_plant_monsters, bullet_level_up
 
     del(chicken)
     del(bullets)
+    del(bullet_level_up)
     del(blue_hat_monsters)
     del(red_plant_monsters)
     del(ui)
@@ -128,9 +134,19 @@ def check_collision_bullet_monters():
                     red_plant_monsters.remove(monster)
                     ui.score += 20
 
+def check_collision_chicken_bulletLevelUp():
+    global chicken, bullet_level_up
+    if collide(chicken, bullet_level_up):
+        bullet_level_up.y = 800
+        chicken.bullet_state = chicken.BULLET_LEVEL02
+
+    pass
+
 def draw_main_scene():
-    global blue_hat_monsters, red_plant_monsters, bullets
+    global blue_hat_monsters, red_plant_monsters, bullets, bullet_level_up
     chicken.draw()
+    bullet_level_up.draw()
+    ui.draw()
     for monster in blue_hat_monsters:
         monster.draw()
 
@@ -139,19 +155,22 @@ def draw_main_scene():
 
     for bullet in bullets:
         bullet.draw()
-    ui.draw()
 
 
 
 
 def update(frame_time):
-    global bullets, blue_hat_monsters, blue_hat_monster_time, red_plant_monsters ,red_plant_monster_time
+    global bullets, blue_hat_monsters, blue_hat_monster_time, red_plant_monsters ,\
+        red_plant_monster_time, bullet_level_up
 
     chicken.update(frame_time)
+    bullet_level_up.update(frame_time)
     check_collision_chicken_monters()
     check_collision_bullet_monters()
+    check_collision_chicken_bulletLevelUp()
     blue_hat_monster_time += frame_time
     red_plant_monster_time += frame_time
+
 
     if blue_hat_monster_time > 0.7:
         new_blue_hat_monster = Blue_hat_monster()
@@ -175,7 +194,10 @@ def update(frame_time):
             bullets.remove(bullet)
 
     if chicken.life == 0:
+        chicken.bullet_state = chicken.BULLET_LEVEL01
         chicken.life =3
+        bullet_level_up.x, bullet_level_up.y = 1000, random.randint(0, 600)
+
         blue_hat_monsters = []
         red_plant_monsters = []
         bullets= []
@@ -197,6 +219,7 @@ def draw(frame_time):
         monster.draw()
 
     chicken.draw()
+    bullet_level_up.draw()
 
     for bullet in bullets:
         bullet.draw()
