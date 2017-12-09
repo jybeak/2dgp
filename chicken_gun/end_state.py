@@ -10,7 +10,7 @@ gameover_image = None
 
 def enter():
     global gameover_image
-    gameover_image = load_image('resouce/gameover.png')
+    gameover_image = load_image('resouce/image/gameover.png')
     game_framework.reset_time()
 
 

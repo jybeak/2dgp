@@ -6,6 +6,7 @@ from pico2d import *
 bullet_between_bullet_time = 0
 mouse_pos_x, mouse_pos_y =0,0
 
+
 class Bullet:
 
 
@@ -15,12 +16,11 @@ class Bullet:
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
-
     image = None
     def __init__(self):
         self.x, self.y = main_state.chicken.x+40 ,main_state.chicken.y
         if Bullet.image == None:
-             Bullet.image = load_image('resouce/bullet.png')
+             Bullet.image = load_image('resouce/image/bullet.png')
 
     def update(self, frame_time):
         global mouse_pos_x, mouse_pos_y
@@ -60,12 +60,15 @@ class Bullet:
 
 class Bullet_level_up:
     image = None
-
+    bullet_level_up_sound = None
     def __init__(self):
 
         self.x, self.y = 1000, random.randint(50, 550)
         if Bullet_level_up.image == None:
-            Bullet_level_up.image = load_image('resouce/bullet_level_up.png')
+            Bullet_level_up.image = load_image('resouce/image/bullet_level_up.png')
+        if Bullet_level_up.bullet_level_up_sound == None:
+            Bullet_level_up.bullet_level_up_sound = load_wav('resouce/sound/bullet_level_up_sound.wav')
+            Bullet_level_up.bullet_level_up_sound.set_volume(32)
 
     def update(self,frame_time):
         if main_state.ui.score >= 10:

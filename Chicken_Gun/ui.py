@@ -9,11 +9,11 @@ class Ui:
     def __init__(self):
         self.score = 0
         if Ui.image_life == None:
-            Ui.image_life = load_image('resouce/chicken_life.png')
+            Ui.image_life = load_image('resouce/image/chicken_life.png')
         if Ui.font_score == None:
-            Ui.font_score = load_font('resouce/ENCR10B.TTF', 25)
+            Ui.font_score = load_font('resouce/font/ENCR10B.TTF', 25)
         if Ui.font_life == None:
-            Ui.font_life = load_font('resouce/ENCR10B.TTF', 25)
+            Ui.font_life = load_font('resouce/font/ENCR10B.TTF', 25)
 
     def draw(self):
         self.font_score.draw(40, 570, 'Score:%d' % self.score, (0, 0, 0))

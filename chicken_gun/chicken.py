@@ -9,8 +9,8 @@ class Chicken:
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
-
-
+    hurt_sound = None
+    bullet_shot_sound = None
     image = None
     LEFT_FLYING, RIGHT_FLYING, STAND = 0, 1, 2
     BULLET_LEVEL01, BULLET_LEVEL02 = 0, 1
@@ -25,7 +25,10 @@ class Chicken:
         self.state = self.STAND
         self.bullet_state = self.BULLET_LEVEL01
         if Chicken.image == None:
-            Chicken.image = load_image('resouce/chicken.png')
+            Chicken.image = load_image('resouce/image/chicken.png')
+        if Chicken.bullet_shot_sound == None:
+            Chicken.bullet_shot_sound = load_wav('resouce/sound/bullet_shot_sound.wav')
+            Chicken.bullet_shot_sound.set_volume(32)
 
 
     def update(self, frame_time):
@@ -45,7 +48,7 @@ class Chicken:
         self.y = clamp(0, self.y, 600)
 
         if self.y < 1:
-            print(self.life)
+            self.shot_sound()
             self.life-=1
             self.y = 500
 
@@ -87,3 +90,7 @@ class Chicken:
         elif (event.type, event.key) == (SDL_KEYUP, SDLK_SPACE):
             if self.state in (self.STAND, self.LEFT_FLYING, self.RIGHT_FLYING):
                 self.jump_dir = 0
+
+    def shot_sound(self):
+        self.bullet_shot_sound.play()
+

@@ -13,11 +13,21 @@ class Blue_hat_monster:
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
     blue_hat_monster_image = None
+    monster_hit_sound = None
+    monster_death_sound = None
 
     def __init__(self):
         self.x, self.y = 800, random.randint(0, 600)
         if Blue_hat_monster.blue_hat_monster_image is None:
-            Blue_hat_monster.blue_hat_monster_image = load_image('resouce/blue_hat_monster.png')
+            Blue_hat_monster.blue_hat_monster_image = load_image('resouce/image/blue_hat_monster.png')
+
+        if Blue_hat_monster.monster_hit_sound == None:
+            Blue_hat_monster.monster_hit_sound = load_wav('resouce/sound/monster_hit_sound.wav')
+            Blue_hat_monster.monster_hit_sound.set_volume(32)
+
+        if Blue_hat_monster.monster_death_sound == None:
+            Blue_hat_monster.monster_death_sound = load_wav('resouce/sound/monster_death_sound.wav')
+            Blue_hat_monster.monster_death_sound.set_volume(32)
 
     def update(self, frame_time):
         distance = Blue_hat_monster.RUN_SPEED_PPS * frame_time
@@ -42,12 +52,20 @@ class Red_plant_monster:
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
     red_plant_monster_image = None
+    monster_hit_sound = None
+    monster_death_sound = None
 
     def __init__(self):
         self.x, self.y = 800, random.randint(0, 600)
         self.life =3
         if Red_plant_monster.red_plant_monster_image is None:
-            Red_plant_monster.red_plant_monster_image = load_image('resouce/red_plant_monster.png')
+            Red_plant_monster.red_plant_monster_image = load_image('resouce/image/red_plant_monster.png')
+        if Red_plant_monster.monster_hit_sound == None:
+            Red_plant_monster.monster_hit_sound = load_wav('resouce/sound/monster_hit_sound.wav')
+            Red_plant_monster.monster_hit_sound.set_volume(32)
+        if Red_plant_monster.monster_death_sound == None:
+            Red_plant_monster.monster_death_sound = load_wav('resouce/sound/monster_death_sound.wav')
+            Red_plant_monster.monster_death_sound.set_volume(32)
 
     def update(self, frame_time):
         distance = Red_plant_monster.RUN_SPEED_PPS * frame_time

@@ -11,8 +11,8 @@ Push_Spacebar_image = None
 def enter():
     global BackGround_Image, Push_Spacebar_image
     open_canvas()
-    BackGround_Image = load_image('resouce/title.png')
-    Push_Spacebar_image = load_image('resouce/space.png')
+    BackGround_Image = load_image('resouce/image/title.png')
+    Push_Spacebar_image = load_image('resouce/image/space.png')
     game_framework.reset_time()
 
 
