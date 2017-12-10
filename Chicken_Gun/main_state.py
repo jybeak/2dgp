@@ -3,7 +3,7 @@ import os
 import game_framework
 import pause_state
 import title_state
-import end_state
+import gameover_state
 import random
 
 
@@ -211,7 +211,7 @@ def update(frame_time):
         blue_hat_monsters = []
         red_plant_monsters = []
         bullets= []
-        game_framework.push_state(end_state)
+        game_framework.push_state(gameover_state)
 
 
 
