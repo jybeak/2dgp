@@ -3,14 +3,15 @@ import main_state
 import title_state
 import game_framework
 from ui import *
-name = "EndState"
+from background import *
+name = "GameoverState"
 
 gameover_image = None
 
 
 def enter():
     global gameover_image
-    gameover_image = load_image('resouce/image/gameover.png')
+    gameover_image = load_image('resouce/image/gameover_image.png')
     game_framework.reset_time()
 
 
@@ -38,6 +39,7 @@ def handle_events(frame_time):
                 game_framework.quit()
             elif (event.type, event.key)==(SDL_KEYDOWN, SDLK_SPACE):
                 main_state.ui.score = 0
+                main_state.background.bgm.play()
                 game_framework.pop_state()
 
 
@@ -45,9 +47,6 @@ def handle_events(frame_time):
 
 def update(frame_time):
     pass
-
-
-
 
 def draw(frame_time):
     global gameover_image

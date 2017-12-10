@@ -20,7 +20,7 @@ class Bullet:
     def __init__(self):
         self.x, self.y = main_state.chicken.x+40 ,main_state.chicken.y
         if Bullet.image == None:
-             Bullet.image = load_image('resouce/image/bullet.png')
+             Bullet.image = load_image('resouce/image/bullet_image.png')
 
     def update(self, frame_time):
         global mouse_pos_x, mouse_pos_y
@@ -65,7 +65,7 @@ class Bullet_level_up:
 
         self.x, self.y = 1000, random.randint(50, 550)
         if Bullet_level_up.image == None:
-            Bullet_level_up.image = load_image('resouce/image/bullet_level_up.png')
+            Bullet_level_up.image = load_image('resouce/image/bullet_level_up_image.png')
         if Bullet_level_up.bullet_level_up_sound == None:
             Bullet_level_up.bullet_level_up_sound = load_wav('resouce/sound/bullet_level_up_sound.wav')
             Bullet_level_up.bullet_level_up_sound.set_volume(32)

@@ -9,7 +9,7 @@ class Ui:
     def __init__(self):
         self.score = 0
         if Ui.image_life == None:
-            Ui.image_life = load_image('resouce/image/chicken_life.png')
+            Ui.image_life = load_image('resouce/image/chicken_life_image.png')
         if Ui.font_score == None:
             Ui.font_score = load_font('resouce/font/ENCR10B.TTF', 25)
         if Ui.font_life == None:

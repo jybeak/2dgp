@@ -19,7 +19,7 @@ class Blue_hat_monster:
     def __init__(self):
         self.x, self.y = 800, random.randint(0, 600)
         if Blue_hat_monster.blue_hat_monster_image is None:
-            Blue_hat_monster.blue_hat_monster_image = load_image('resouce/image/blue_hat_monster.png')
+            Blue_hat_monster.blue_hat_monster_image = load_image('resouce/image/blue_hat_monster_image.png')
 
         if Blue_hat_monster.monster_hit_sound == None:
             Blue_hat_monster.monster_hit_sound = load_wav('resouce/sound/monster_hit_sound.wav')
@@ -59,7 +59,7 @@ class Red_plant_monster:
         self.x, self.y = 800, random.randint(0, 600)
         self.life =3
         if Red_plant_monster.red_plant_monster_image is None:
-            Red_plant_monster.red_plant_monster_image = load_image('resouce/image/red_plant_monster.png')
+            Red_plant_monster.red_plant_monster_image = load_image('resouce/image/red_plant_monster_image.png')
         if Red_plant_monster.monster_hit_sound == None:
             Red_plant_monster.monster_hit_sound = load_wav('resouce/sound/monster_hit_sound.wav')
             Red_plant_monster.monster_hit_sound.set_volume(32)

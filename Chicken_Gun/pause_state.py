@@ -11,7 +11,7 @@ count =0
 
 def enter():
     global image
-    image = load_image('resouce/image/chicken.png')
+    image = load_image('resouce/image/chicken_image.png')
 
 
 def exit():
@@ -42,6 +42,7 @@ def handle_events(frame_time):
             game_framework.quit()
         elif event.type==SDL_KEYDOWN and event.key == SDLK_p:
             game_framework.pop_state()
+            main_state.background.bgm.resume()
     pass
 
 

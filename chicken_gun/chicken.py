@@ -25,7 +25,7 @@ class Chicken:
         self.state = self.STAND
         self.bullet_state = self.BULLET_LEVEL01
         if Chicken.image == None:
-            Chicken.image = load_image('resouce/image/chicken.png')
+            Chicken.image = load_image('resouce/image/chicken_image.png')
         if Chicken.bullet_shot_sound == None:
             Chicken.bullet_shot_sound = load_wav('resouce/sound/bullet_shot_sound.wav')
             Chicken.bullet_shot_sound.set_volume(32)
@@ -48,7 +48,6 @@ class Chicken:
         self.y = clamp(0, self.y, 600)
 
         if self.y < 1:
-            self.shot_sound()
             self.life-=1
             self.y = 500
 

@@ -3,6 +3,7 @@ import os
 import game_framework
 import pause_state
 import title_state
+import gameclear_state
 import gameover_state
 import random
 
@@ -12,6 +13,7 @@ from bullet import *
 from monster import *
 from ui import *
 from background import *
+from cleardoor import *
 
 
 
@@ -23,35 +25,45 @@ current_time = get_time()
 chicken = None
 bullets = None
 bullet_level_up = None
+door = None
 blue_hat_monsters = None
 red_plant_monsters = None
 background = None
+backcloud = None
+frontcloud = None
 ui = None
-
+backcloud, frontcloud
 
 def create_world():
-    global chicken, ui, bullets, blue_hat_monsters, red_plant_monsters, bullet_level_up, background
+    global chicken, ui, bullets, blue_hat_monsters, red_plant_monsters, bullet_level_up, \
+        background, door,backcloud, frontcloud
     chicken = Chicken()
     ui = Ui()
     bullet_level_up = Bullet_level_up()
+    door = Door()
+    backcloud = Backcloud()
+    frontcloud = Frontcloud()
     background = Background()
     bullets = []
     blue_hat_monsters = []
     red_plant_monsters = []
 
-    pass
 
 
 def destroy_world():
-    global chicken, ui,bullets, blue_hat_monsters, red_plant_monsters, bullet_level_up, background
+    global chicken, ui,bullets, blue_hat_monsters, red_plant_monsters, bullet_level_up, background,\
+        door,backcloud, frontcloud
 
     del(chicken)
     del(bullets)
     del(bullet_level_up)
+    del(door)
     del(blue_hat_monsters)
     del(red_plant_monsters)
     del(ui)
     del(background)
+    del(backcloud)
+    del(frontcloud)
 
 
 
@@ -84,10 +96,13 @@ def handle_events(frame_time):
                 game_framework.quit()
             elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
                 game_framework.push_state(pause_state)
+                background.bgm.pause()
             elif event.type == SDL_MOUSEBUTTONDOWN:
                 new_bullet = Bullet()
                 bullets.append(new_bullet)
                 chicken.shot_sound()
+            elif event.type == SDL_KEYDOWN and event.key == SDLK_h:
+                game_framework.push_state(gameclear_state)
             else:
                 chicken.handle_event(event)
                 for bullet in bullets:
@@ -149,35 +164,28 @@ def check_collision_chicken_bulletLevelUp():
         bullet_level_up.bullet_level_up_sound.play()
         chicken.bullet_state = chicken.BULLET_LEVEL02
 
-    pass
 
-def draw_main_scene():
-    global blue_hat_monsters, red_plant_monsters, bullets, bullet_level_up,background
-    chicken.draw()
-    bullet_level_up.draw()
-    ui.draw()
-    background.draw()
-    for monster in blue_hat_monsters:
-        monster.draw()
+def check_collision_chicken_door():
+    global chicken, door
+    if collide(chicken, door):
+        game_framework.push_state(gameclear_state)
 
-    for monster in red_plant_monsters:
-        monster.draw()
-
-    for bullet in bullets:
-        bullet.draw()
 
 
 
 
 def update(frame_time):
     global bullets, blue_hat_monsters, blue_hat_monster_time, red_plant_monsters ,\
-        red_plant_monster_time, bullet_level_up
-
+        red_plant_monster_time, bullet_level_up, background, door, backcloud, frontcloud
+    backcloud.update(frame_time)
+    frontcloud.update(frame_time)
     chicken.update(frame_time)
+    door.update(frame_time)
     bullet_level_up.update(frame_time)
     check_collision_chicken_monters()
     check_collision_bullet_monters()
     check_collision_chicken_bulletLevelUp()
+    check_collision_chicken_door()
     blue_hat_monster_time += frame_time
     red_plant_monster_time += frame_time
 
@@ -206,7 +214,9 @@ def update(frame_time):
     if chicken.life == 0:
         chicken.bullet_state = chicken.BULLET_LEVEL01
         chicken.life =3
+        background.bgm.stop()
         bullet_level_up.x, bullet_level_up.y = 1000, random.randint(0, 600)
+        door.x = 1000
 
         blue_hat_monsters = []
         red_plant_monsters = []
@@ -214,15 +224,32 @@ def update(frame_time):
         game_framework.push_state(gameover_state)
 
 
+def draw_main_scene():
+    global chicken, ui,bullets, blue_hat_monsters, red_plant_monsters
+    background.draw()
+    backcloud.draw()
+    frontcloud.draw()
+    door.draw()
+    bullet_level_up.draw()
+    for monster in blue_hat_monsters:
+        monster.draw()
 
-
-
+    for monster in red_plant_monsters:
+        monster.draw()
+    chicken.draw()
+    for bullet in bullets:
+        bullet.draw()
+    ui.draw()
 
 
 def draw(frame_time):
     global chicken, ui,bullets, blue_hat_monsters, red_plant_monsters
     clear_canvas()
     background.draw()
+    backcloud.draw()
+    frontcloud.draw()
+    door.draw()
+    bullet_level_up.draw()
     for monster in blue_hat_monsters:
         monster.draw()
 
@@ -230,7 +257,6 @@ def draw(frame_time):
         monster.draw()
 
     chicken.draw()
-    bullet_level_up.draw()
     for bullet in bullets:
         bullet.draw()
     ui.draw()
