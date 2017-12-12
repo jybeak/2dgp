@@ -43,6 +43,7 @@ class Bullet:
 
 
 
+
     def draw(self):
         self.image.draw(self.x, self.y)
 

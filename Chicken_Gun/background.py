@@ -48,7 +48,7 @@ class Backcloud:
     image = None
 
     PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-    RUN_SPEED_KMPH = 10.0  # Km / Hour
+    RUN_SPEED_KMPH = 8.0  # Km / Hour
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -59,6 +59,30 @@ class Backcloud:
 
     def update(self, frame_time):
          self.x -= (Backcloud.RUN_SPEED_PPS * frame_time)
+         if self.x < -450:
+             self.x += 1550
+
+    def handle_event(self, event):
+        pass
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+class Middlecloud:
+    image = None
+
+    PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+    RUN_SPEED_KMPH = 11.0  # Km / Hour
+    RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+    RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+    RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+    def __init__(self):
+        self.x, self.y = 400, 470
+        if Middlecloud.image == None:
+            Middlecloud.image = load_image('resouce/image/middle_cloud_image.png')
+
+    def update(self, frame_time):
+         self.x -= (Middlecloud.RUN_SPEED_PPS * frame_time)
          if self.x < -450:
              self.x += 1550
 
