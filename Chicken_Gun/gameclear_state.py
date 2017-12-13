@@ -12,9 +12,9 @@ gameclear_music = None
 def enter():
     global gameclear_image, gameclear_music
     gameclear_image = load_image('resouce/image/gameclear_image.png')
-    gameclear_music = load_music('resouce/sound/gameclear_music.mp3')
-    gameclear_music.set_volume(32)
-
+    if gameclear_music == None:
+        gameclear_music = load_music('resouce/sound/gameclear_music.mp3')
+    gameclear_music.set_volume(20)
     gameclear_music.play()
 
 

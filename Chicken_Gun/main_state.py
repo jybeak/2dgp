@@ -3,8 +3,8 @@ import os
 import game_framework
 import pause_state
 import title_state
-import gameclear_state
 import gameover_state
+import gameclear_state
 import random
 
 
@@ -28,6 +28,7 @@ bullet_level_up = None
 door = None
 blue_hat_monsters = None
 red_plant_monsters = None
+boss_monster = None
 background = None
 backcloud = None
 frontcloud = None
@@ -37,7 +38,7 @@ ui = None
 
 def create_world():
     global chicken, ui, bullets, blue_hat_monsters, red_plant_monsters, bullet_level_up, \
-        background, door,backcloud, frontcloud, middlecloud
+        background, door,backcloud, frontcloud, middlecloud, boss_monster
     chicken = Chicken()
     ui = Ui()
     bullet_level_up = Bullet_level_up()
@@ -49,6 +50,7 @@ def create_world():
     bullets = []
     blue_hat_monsters = []
     red_plant_monsters = []
+    boss_monster =Boss_monster()
 
 
 
@@ -64,7 +66,7 @@ def destroy_world():
     del(backcloud)
     del(frontcloud)
     del(middlecloud)
-
+    del(boss_monster)
 
 
 def enter():
@@ -102,6 +104,7 @@ def handle_events(frame_time):
                 bullets.append(new_bullet)
                 chicken.shot_sound()
             elif event.type == SDL_KEYDOWN and event.key == SDLK_h:
+                background.bgm.stop()
                 game_framework.push_state(gameclear_state)
             else:
                 chicken.handle_event(event)
@@ -121,7 +124,6 @@ def collide(a, b):
     return True
 
 def check_collision_chicken_monters():
-
     for monster in blue_hat_monsters:
         if collide(chicken, monster):
             blue_hat_monsters.remove(monster)
@@ -152,18 +154,25 @@ def check_collision_bullet_monters():
                     red_plant_monsters.remove(monster)
                     ui.score += 20
 
+    if  boss_monster.boss_monster_time> 6 and boss_monster.life > 0:
+        for bullet in bullets:
+            if collide(bullet, boss_monster):
+                bullets.remove(bullet)
+                boss_monster.life-=1
+                if boss_monster.life == 0:
+                    ui.score +=100
+
 def check_collision_chicken_bulletLevelUp():
     if collide(chicken, bullet_level_up):
         bullet_level_up.y = 800
         bullet_level_up.bullet_level_up_sound.play()
         chicken.bullet_state = chicken.BULLET_LEVEL02
 
-
 def check_collision_chicken_door():
     global chicken, door
     if collide(chicken, door):
+        background.bgm.stop()
         game_framework.push_state(gameclear_state)
-
 
 def update(frame_time):
     global bullets, blue_hat_monsters, red_plant_monsters
@@ -215,23 +224,25 @@ def create_monster(frame_time):
     blue_hat_monster_time += frame_time
     red_plant_monster_time += frame_time
 
-    if blue_hat_monster_time > 0.7 and ui.score <= 200:
+    if blue_hat_monster_time > 0.7 and boss_monster.life > 0:
         new_blue_hat_monster = Blue_hat_monster()
         blue_hat_monsters.append(new_blue_hat_monster)
         blue_hat_monster_time = 0
 
-    if red_plant_monster_time > 1.2 and ui.score <= 200:
+    if red_plant_monster_time > 1.2 and boss_monster.life > 0:
         new_red_plant_monster = Red_plant_monster()
         red_plant_monsters.append(new_red_plant_monster)
         red_plant_monster_time = 0
 
+    boss_monster.update(frame_time)
+
 def draw_main_scene():
+    global ui
     background.draw()
     backcloud.draw()
     middlecloud.draw()
     frontcloud.draw()
-
-    door.draw()
+    boss_monster.draw()
     bullet_level_up.draw()
     for monster in blue_hat_monsters:
         monster.draw()
@@ -257,6 +268,8 @@ def draw(frame_time):
 
     for monster in red_plant_monsters:
         monster.draw()
+
+    boss_monster.draw()
 
     chicken.draw()
     for bullet in bullets:

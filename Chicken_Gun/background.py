@@ -4,7 +4,7 @@ class Background:
     def __init__(self):
         self.image = load_image('resouce/image/background_image.png')
         self.bgm = load_music('resouce/sound/background_music.mp3')
-        self.bgm.set_volume(32)
+        self.bgm.set_volume(15)
         self.bgm.repeat_play()
         # fill here
 

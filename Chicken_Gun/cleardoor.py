@@ -1,4 +1,5 @@
 import main_state
+from monster import *
 from pico2d import *
 
 
@@ -10,12 +11,10 @@ class Door:
         self.x, self.y = 1000, 300
         if Door.image == None:
             Door.image = load_image('resouce/image/door_image.png')
-        if Door.sound == None:
-            Door.sound = load_wav('resouce/sound/door_sound.wav')
-            Door.sound.set_volume(32)
 
     def update(self,frame_time):
-        if main_state.ui.score >= 300 and self.x > 600:
+
+        if main_state.boss_monster.life <= 0 and self.x > 600:
             self.x -= 500 * frame_time / 3
 
 

@@ -69,7 +69,7 @@ class Bullet_level_up:
             Bullet_level_up.image = load_image('resouce/image/bullet_level_up_image.png')
         if Bullet_level_up.bullet_level_up_sound == None:
             Bullet_level_up.bullet_level_up_sound = load_wav('resouce/sound/bullet_level_up_sound.wav')
-            Bullet_level_up.bullet_level_up_sound.set_volume(32)
+            Bullet_level_up.bullet_level_up_sound.set_volume(15)
 
     def update(self,frame_time):
         if main_state.ui.score >= 100:

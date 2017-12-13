@@ -28,7 +28,7 @@ class Chicken:
             Chicken.image = load_image('resouce/image/chicken_image.png')
         if Chicken.bullet_shot_sound == None:
             Chicken.bullet_shot_sound = load_wav('resouce/sound/bullet_shot_sound.wav')
-            Chicken.bullet_shot_sound.set_volume(32)
+            Chicken.bullet_shot_sound.set_volume(15)
 
 
     def update(self, frame_time):
