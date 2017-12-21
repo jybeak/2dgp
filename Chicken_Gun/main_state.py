@@ -34,11 +34,12 @@ backcloud = None
 frontcloud = None
 middlecloud = None
 ui = None
-
+boss_monster_bullets = None
 
 def create_world():
     global chicken, ui, bullets, blue_hat_monsters, red_plant_monsters, bullet_level_up, \
-        background, door,backcloud, frontcloud, middlecloud, boss_monster
+        background, door,backcloud, frontcloud, middlecloud, boss_monster, boss_monster_bullets
+
     chicken = Chicken()
     ui = Ui()
     bullet_level_up = Bullet_level_up()
@@ -50,9 +51,8 @@ def create_world():
     bullets = []
     blue_hat_monsters = []
     red_plant_monsters = []
+    boss_monster_bullets = []
     boss_monster =Boss_monster()
-
-
 
 def destroy_world():
     del(chicken)
@@ -67,6 +67,7 @@ def destroy_world():
     del(frontcloud)
     del(middlecloud)
     del(boss_monster)
+    del(boss_monster_bullets)
 
 
 def enter():
@@ -134,6 +135,13 @@ def check_collision_chicken_monters():
             red_plant_monsters.remove(monster)
             chicken.life-=1
 
+
+def check_collision_chicken_bossbullets():
+    for bullet in boss_monster_bullets:
+        if collide(chicken, bullet):
+            boss_monster_bullets.remove(bullet)
+            chicken.life-=1
+
 def check_collision_bullet_monters():
     for monster in blue_hat_monsters:
         for bullet in bullets:
@@ -175,7 +183,7 @@ def check_collision_chicken_door():
         game_framework.push_state(gameclear_state)
 
 def update(frame_time):
-    global bullets, blue_hat_monsters, red_plant_monsters
+    global bullets, blue_hat_monsters, red_plant_monsters, boss_monster_blue_bullets, boss_monster_red_bullets
     backcloud.update(frame_time)
     middlecloud.update(frame_time)
     frontcloud.update(frame_time)
@@ -187,6 +195,7 @@ def update(frame_time):
     check_collision_chicken_bulletLevelUp()
     check_collision_chicken_door()
 
+    check_collision_chicken_bossbullets()
 
     create_monster(frame_time)
     chicken_dead(frame_time)
@@ -197,32 +206,39 @@ def update(frame_time):
     for monster in red_plant_monsters:
         monster.update(frame_time)
 
+    for bullet in boss_monster_bullets:
+        bullet.update(frame_time)
+
     for bullet in bullets:
         bullet.update(frame_time)
         if bullet.x > 800 or bullet.x < 0 or bullet.y > 600 or bullet.y < 0:
             bullets.remove(bullet)
 
-
 def chicken_dead(frame_time):
-    global bullets, blue_hat_monsters, red_plant_monsters
+    global bullets, blue_hat_monsters, red_plant_monsters, boss_monster_bullets
     if chicken.life == 0:
         chicken.bullet_state = chicken.BULLET_LEVEL01
         chicken.life =3
         background.bgm.stop()
+        boss_monster.life = 20
+        boss_monster.x = 1000
+        boss_monster.boss_monster_time = 0
         bullet_level_up.x, bullet_level_up.y = 1000, random.randint(0, 600)
         door.x = 1000
-
+        boss_monster_bullets =[]
         blue_hat_monsters = []
         red_plant_monsters = []
         bullets= []
+
         game_framework.push_state(gameover_state)
 
 def create_monster(frame_time):
     global bullets, blue_hat_monsters, red_plant_monsters, \
-        red_plant_monster_time, blue_hat_monster_time, score
-
+        red_plant_monster_time, blue_hat_monster_time, score, \
+        boss_monster_bullets, boss_bullet_time
     blue_hat_monster_time += frame_time
     red_plant_monster_time += frame_time
+    boss_bullet_time += frame_time
 
     if blue_hat_monster_time > 0.7 and boss_monster.life > 0:
         new_blue_hat_monster = Blue_hat_monster()
@@ -235,6 +251,12 @@ def create_monster(frame_time):
         red_plant_monster_time = 0
 
     boss_monster.update(frame_time)
+
+    if boss_monster.boss_monster_time > 6 and boss_monster.life > 0:
+        if boss_bullet_time > 1.0:
+            new_red_boss_bullet = Boss_monster_bullet()
+            boss_monster_bullets.append(new_red_boss_bullet)
+            boss_bullet_time = 0
 
 def draw_main_scene():
     global ui
@@ -249,6 +271,10 @@ def draw_main_scene():
 
     for monster in red_plant_monsters:
         monster.draw()
+
+    for bullet in boss_monster_bullets:
+        bullet.draw()
+
     chicken.draw()
     for bullet in bullets:
         bullet.draw()
@@ -268,6 +294,9 @@ def draw(frame_time):
 
     for monster in red_plant_monsters:
         monster.draw()
+
+    for bullet in boss_monster_bullets:
+        bullet.draw()
 
     boss_monster.draw()
 

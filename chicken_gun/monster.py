@@ -5,6 +5,7 @@ from pico2d import *
 
 blue_hat_monster_time = 0
 red_plant_monster_time = 0
+boss_bullet_time = 0
 boss_monster_music_on = None
 th = 0
 
@@ -88,6 +89,7 @@ class Boss_monster:
     boss_monster_music = None
     monster_death_sound = None
 
+
     def __init__(self):
         self.x, self.y = 1000, 300
         self.life = 20
@@ -97,9 +99,6 @@ class Boss_monster:
         if Boss_monster.boss_monster_music == None:
             Boss_monster.boss_monster_music = load_music('resouce/sound/boss_monster_music.mp3')
             Boss_monster.boss_monster_music.set_volume(15)
-        if main_state.ui.score == 10:
-            main_state.background.bgm.pause()
-            Boss_monster.boss_monster_music.repeat_play()
 
 
     def update(self, frame_time):
@@ -140,3 +139,32 @@ class Boss_monster:
     def draw_bb(self):
         if main_state.ui.score >= 200 and self.life > 0:
             draw_rectangle(*self.get_bb())
+
+class Boss_monster_bullet:
+    PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+    RUN_SPEED_KMPH = 60.0  # Km / Hour
+    RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+    RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+    RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+    boss_monster_bullet_image = None
+    def __init__(self):
+        self.x, self.y = main_state.boss_monster.x-55, main_state.boss_monster.y
+        if Boss_monster_bullet.boss_monster_bullet_image is None:
+            Boss_monster_bullet.boss_monster_bullet_image = load_image('resouce/image/bossbullet.png')
+
+    def update(self, frame_time):
+        distance = Boss_monster_bullet.RUN_SPEED_PPS * frame_time
+        self.x -= distance
+        self.y += random.randint(-1,1) * Boss_monster_bullet.RUN_SPEED_PPS * frame_time
+
+
+
+    def draw(self):
+        self.boss_monster_bullet_image.draw(self.x, self.y)
+
+    def get_bb(self):
+        return self.x - 20, self.y - 25, self.x + 20, self.y + 25
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())

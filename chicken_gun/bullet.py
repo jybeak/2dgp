@@ -72,7 +72,7 @@ class Bullet_level_up:
             Bullet_level_up.bullet_level_up_sound.set_volume(15)
 
     def update(self,frame_time):
-        if main_state.ui.score >= 100:
+        if main_state.ui.score >= 150:
             self.x -= 500 * frame_time / 3
 
     def draw(self):
