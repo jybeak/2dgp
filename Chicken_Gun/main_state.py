@@ -240,12 +240,12 @@ def create_monster(frame_time):
     red_plant_monster_time += frame_time
     boss_bullet_time += frame_time
 
-    if blue_hat_monster_time > 0.7 and boss_monster.life > 0:
+    if blue_hat_monster_time > 1.0 and boss_monster.life > 0:
         new_blue_hat_monster = Blue_hat_monster()
         blue_hat_monsters.append(new_blue_hat_monster)
         blue_hat_monster_time = 0
 
-    if red_plant_monster_time > 1.2 and boss_monster.life > 0:
+    if red_plant_monster_time > 1.6 and boss_monster.life > 0:
         new_red_plant_monster = Red_plant_monster()
         red_plant_monsters.append(new_red_plant_monster)
         red_plant_monster_time = 0

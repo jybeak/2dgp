@@ -151,7 +151,7 @@ class Boss_monster_bullet:
     def __init__(self):
         self.x, self.y = main_state.boss_monster.x-55, main_state.boss_monster.y
         if Boss_monster_bullet.boss_monster_bullet_image is None:
-            Boss_monster_bullet.boss_monster_bullet_image = load_image('resouce/image/bossbullet.png')
+            Boss_monster_bullet.boss_monster_bullet_image = load_image('resouce/image/bossbullet_image.png')
 
     def update(self, frame_time):
         distance = Boss_monster_bullet.RUN_SPEED_PPS * frame_time
